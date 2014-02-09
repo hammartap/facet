@@ -1,5 +1,4 @@
 (ns facet.core
-;  (:import com.example.sony.cameraremote.ServerDevice.ApiService)
   (:import com.example.sony.cameraremote.SimpleRemoteApi)
   (:import com.example.sony.cameraremote.SimpleSsdpClient)
 ;  (:import com.example.sony.cameraremote.SimpleCameraEventObserver)
@@ -87,295 +86,274 @@
 ;;#_(
 ;; #Public functions of SimpleRemoteApi.java
 (defn getAvailableApiList
-  "    /**
-     * Calls getAvailableApiList API to the target server. Request JSON data is
-     * such like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"getAvailableApiList\",
-     *   \"params\": [\"\"],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls getAvailableApiList API to the target server. Request JSON data is
+   such like as below.
+   
+   <pre>
+   {
+     \"method\": \"getAvailableApiList\",
+     \"params\": [\"\"],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.getAvailableApiList @RemoteApi))
 
 
 (defn getApplicationInfo
-  "    /**
-     * Calls getApplicationInfo API to the target server. Request JSON data is
-     * such like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"getApplicationInfo\",
-     *   \"params\": [\"\"],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls getApplicationInfo API to the target server. Request JSON data is
+   such like as below.
+   
+   <pre>
+   {
+     \"method\": \"getApplicationInfo\",
+     \"params\": [\"\"],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.getApplicationInfo @RemoteApi))
 
 
 (defn getShootMode
   "/**
-     * Calls getShootMode API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"getShootMode\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+   Calls getShootMode API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"getShootMode\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.getShootMode @RemoteApi))
 
 
 (defn setShootMode
-  "    /**
-     * Calls setShootMode API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"setShootMode\",
-     *   \"params\": [\"still\"],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @param shootMode shoot mode (ex. \"still\")
-     * @return JSON data of response
-     */"
+  "Calls setShootMode API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"setShootMode\",
+     \"params\": [\"still\"],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @param shootMode shoot mode (ex. \"still\")
+   @return JSON data of response"
   [shootMode]
   )
 
+
 (defn getAvailableShootMode
-  "    /**
-     * Calls getAvailableShootMode API to the target server. Request JSON data
-     * is such like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"getAvailableShootMode\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls getAvailableShootMode API to the target server. Request JSON data
+   is such like as below.
+   
+   <pre>
+   {
+     \"method\": \"getAvailableShootMode\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.getAvailableShootMode @RemoteApi))
 
+
 (defn getSupportedShootMode
-  "/**
-     * Calls getSupportedShootMode API to the target server. Request JSON data
-     * is such like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"getSupportedShootMode\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls getSupportedShootMode API to the target server. Request JSON data
+   is such like as below.
+   
+   <pre>
+   {
+     \"method\": \"getSupportedShootMode\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.getSupportedShootMode @RemoteApi))
 
+
 (defn startLiveview
-  "    /**
-     * Calls startLiveview API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"startLiveview\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls startLiveview API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"startLiveview\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.startLiveview @RemoteApi))
 
+
 (defn stopLiveview
-  "    /**
-     * Calls stopLiveview API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"stopLiveview\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls stopLiveview API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"stopLiveview\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.stopLiveview @RemoteApi))
 
+
 (defn startRecMode
-  "    /**
-     * Calls startRecMode API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"startRecMode\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls startRecMode API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"startRecMode\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.startRecMode @RemoteApi))
 
 
 (defn stopRecMode
-  "    /**
-     * Calls stopRecMode API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"stopRecMode\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls stopRecMode API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"stopRecMode\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.stopRecMode @RemoteApi))
 
 
 (defn actTakePicture
-  "    /**
-     * Calls actTakePicture API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"actTakePicture\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls actTakePicture API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"actTakePicture\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.actTakePicture @RemoteApi))
 
+
 (defn startMovieRec
-  "    /**
-     * Calls startMovieRec API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"startMovieRec\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls startMovieRec API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"startMovieRec\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.startMovieRec @RemoteApi))
 
+
 (defn stopMovieRec
-  "    /**
-     * Calls stopMovieRec API to the target server. Request JSON data is such
-     * like as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"stopMovieRec\",
-     *   \"params\": [],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
+  "Calls stopMovieRec API to the target server. Request JSON data is such
+   like as below.
+   
+   <pre>
+   {
+     \"method\": \"stopMovieRec\",
+     \"params\": [],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
   []
   (.stopMovieRec @RemoteApi))
 
+
 (defn actZoom
-  "    /**
-     * Calls actZoom API to the target server. Request JSON data is such like as
-     * below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"actZoom\",
-     *   \"params\": [\"in\",\"stop\"],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @return JSON data of response
-     */"
-     [^String direction ^String movement]
-     )
+  "Calls actZoom API to the target server. Request JSON data is such like as
+   below.
+   
+   <pre>
+   {
+     \"method\": \"actZoom\",
+     \"params\": [\"in\",\"stop\"],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @return JSON data of response"
+  [^String direction ^String movement]
+  )
 
 
 (defn getEvent
-  "    /**
-     * Calls getEvent API to the target server. Request JSON data is such like
-     * as below.
-     * 
-     * <pre>
-     * {
-     *   \"method\": \"getEvent\",
-     *   \"params\": [true],
-     *   \"id\": 2,
-     *   \"version\": \"1.0\"
-     * }
-     * </pre>
-     * 
-     * @param longPollingFlag true means long polling request.
-     * @return JSON data of response
-     */"
+  "Calls getEvent API to the target server. Request JSON data is such like
+   as below.
+   
+   <pre>
+   {
+     \"method\": \"getEvent\",
+     \"params\": [true],
+     \"id\": 2,
+     \"version\": \"1.0\"
+   }
+   </pre>
+   
+   @param longPollingFlag true means long polling request.
+   @return JSON data of response"
   [longPollingFlag]
   (.getEvent @RemoteApi longPollingFlag))
 
