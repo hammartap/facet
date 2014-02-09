@@ -1,14 +1,16 @@
 (ns facet.core
 ;  (:import com.example.sony.cameraremote.ServerDevice.ApiService)
-;  (:import com.example.sony.cameraremote.SimpleRemoteApi)
+  ;(:import com.example.sony.cameraremote.SimpleRemoteApi)
   (:import com.example.sony.cameraremote.SimpleSsdpClient)
 ;  (:import com.example.sony.cameraremote.SimpleCameraEventObserver)
 )
 
 
+;; Server device.
 (def SonyDevice (atom nil))
 
 
+;; Contains static information of the camera.
 (def SonyCamInfo {:name            (atom nil)
                :action-list-url (atom nil)
                :endpoint-url    (atom nil)
@@ -20,6 +22,7 @@
                :ip-address      (atom nil)
                :api-services    (atom nil)
                })
+
 
 (defn apiService
   "service-name:
