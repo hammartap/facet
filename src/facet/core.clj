@@ -1,27 +1,28 @@
 (ns facet.core
 ;  (:import com.example.sony.cameraremote.ServerDevice.ApiService)
-  ;(:import com.example.sony.cameraremote.SimpleRemoteApi)
+  (:import com.example.sony.cameraremote.SimpleRemoteApi)
   (:import com.example.sony.cameraremote.SimpleSsdpClient)
 ;  (:import com.example.sony.cameraremote.SimpleCameraEventObserver)
 )
 
 
 ;; Server device.
-(def SonyDevice (atom nil))
+(def ^:private SonyDevice (atom nil))
+(def RemoteApi (atom nil))
 
 
 ;; Contains static information of the camera.
 (def SonyCamInfo {:name            (atom nil)
-               :action-list-url (atom nil)
-               :endpoint-url    (atom nil)
-               :friendly-name   (atom nil)
-               :ddurl           (atom nil)
-               :model-name      (atom nil)
-               :udn             (atom nil)
-               :icon-url        (atom nil)
-               :ip-address      (atom nil)
-               :api-services    (atom nil)
-               })
+                  :action-list-url (atom nil)
+                  :endpoint-url    (atom nil)
+                  :friendly-name   (atom nil)
+                  :ddurl           (atom nil)
+                  :model-name      (atom nil)
+                  :udn             (atom nil)
+                  :icon-url        (atom nil)
+                  :ip-address      (atom nil)
+                  :api-services    (atom nil)
+                  })
 
 
 (defn apiService
@@ -40,17 +41,17 @@
     ))
 
 
-(defn updateSonyCamInfo!
-  []
+(defn- updateSonyCamInfo!
+  [device]
   (let [
-        device @SonyDevice
-        fname (-> device (.getFriendlyName))
-        ddurl (-> device (.getDDUrl))
-        mname (-> device (.getModelName))
-        udn   (-> device (.getUDN))
-        iurl  (-> device (.getIconUrl))
-        ip    (-> device (.getIpAddres))
-        services (-> device (.getApiServices))
+        dev @SonyDevice
+        fname (-> dev (.getFriendlyName))
+        ddurl (-> dev (.getDDUrl))
+        mname (-> dev (.getModelName))
+        udn   (-> dev (.getUDN))
+        iurl  (-> dev (.getIconUrl))
+        ip    (-> dev (.getIpAddres))
+        services (-> dev (.getApiServices))
         ]
     (reset! (SonyCamInfo :friendly-name) fname)
     (reset! (SonyCamInfo :ddurl) ddurl)
@@ -62,13 +63,14 @@
     ))
 
 
-(defn search-result-handler
-  "This function returns SimpleSsdpClient"
+(defn- search-result-handler
+  "This function returns SimpleSsdpClient object."
   []
   (proxy [com.example.sony.cameraremote.SimpleSsdpClient$SearchResultHandler] []
     (onDeviceFound   [^com.example.sony.cameraremote.ServerDevice device]
-      (let [dev device]
-       (reset! SonyDevice dev)))
+      (reset! SonyDevice device)
+      (reset! RemoteApi (proxy [com.example.sony.cameraremote.SimpleRemoteApi] [device]))
+      (updateSonyCamInfo! device))
     (onFinished      []
       (println "onFinished!"))
     (onErrorFinished []
@@ -79,11 +81,308 @@
   "Set up camera device. This Device Discovery sequence reffers CameraRemoteSampleApp.java"
   []
   (let [ssdp (new SimpleSsdpClient)]
-    (if (not (.isSearching ssdp)) (.search ssdp (search-result-handler)))
-    ))
+    (if (not (.isSearching ssdp)) (.search ssdp (search-result-handler)))))
 
 
-#_(defn takeAndFetchPicture
+;;#_(
+;; #Public functions of SimpleRemoteApi.java
+(defn getAvailableApiList
+  "    /**
+     * Calls getAvailableApiList API to the target server. Request JSON data is
+     * such like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"getAvailableApiList\",
+     *   \"params\": [\"\"],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.getAvailableApiList @RemoteApi))
+
+
+(defn getApplicationInfo
+  "    /**
+     * Calls getApplicationInfo API to the target server. Request JSON data is
+     * such like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"getApplicationInfo\",
+     *   \"params\": [\"\"],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.getApplicationInfo @RemoteApi))
+
+
+(defn getShootMode
+  "/**
+     * Calls getShootMode API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"getShootMode\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.getShootMode @RemoteApi))
+
+
+(defn setShootMode
+  "    /**
+     * Calls setShootMode API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"setShootMode\",
+     *   \"params\": [\"still\"],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @param shootMode shoot mode (ex. \"still\")
+     * @return JSON data of response
+     */"
+  [shootMode]
+  )
+
+(defn getAvailableShootMode
+  "    /**
+     * Calls getAvailableShootMode API to the target server. Request JSON data
+     * is such like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"getAvailableShootMode\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.getAvailableShootMode @RemoteApi))
+
+(defn getSupportedShootMode
+  "/**
+     * Calls getSupportedShootMode API to the target server. Request JSON data
+     * is such like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"getSupportedShootMode\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.getSupportedShootMode @RemoteApi))
+
+(defn startLiveview
+  "    /**
+     * Calls startLiveview API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"startLiveview\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.startLiveview @RemoteApi))
+
+(defn stopLiveview
+  "    /**
+     * Calls stopLiveview API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"stopLiveview\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.stopLiveview @RemoteApi))
+
+(defn startRecMode
+  "    /**
+     * Calls startRecMode API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"startRecMode\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.startRecMode @RemoteApi))
+
+
+(defn stopRecMode
+  "    /**
+     * Calls stopRecMode API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"stopRecMode\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.stopRecMode @RemoteApi))
+
+
+(defn actTakePicture
+  "    /**
+     * Calls actTakePicture API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"actTakePicture\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.actTakePicture @RemoteApi))
+
+(defn startMovieRec
+  "    /**
+     * Calls startMovieRec API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"startMovieRec\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.startMovieRec @RemoteApi))
+
+(defn stopMovieRec
+  "    /**
+     * Calls stopMovieRec API to the target server. Request JSON data is such
+     * like as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"stopMovieRec\",
+     *   \"params\": [],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+  []
+  (.stopMovieRec @RemoteApi))
+
+(defn actZoom
+  "    /**
+     * Calls actZoom API to the target server. Request JSON data is such like as
+     * below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"actZoom\",
+     *   \"params\": [\"in\",\"stop\"],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @return JSON data of response
+     */"
+     [^String direction ^String movement]
+     )
+
+
+(defn getEvent
+  "    /**
+     * Calls getEvent API to the target server. Request JSON data is such like
+     * as below.
+     * 
+     * <pre>
+     * {
+     *   \"method\": \"getEvent\",
+     *   \"params\": [true],
+     *   \"id\": 2,
+     *   \"version\": \"1.0\"
+     * }
+     * </pre>
+     * 
+     * @param longPollingFlag true means long polling request.
+     * @return JSON data of response
+     */"
+  [longPollingFlag]
+  (.getEvent @RemoteApi longPollingFlag))
+
+
+#_(
+;; Let's move this function to Application layer.
+(defn takeAndFetchPicture
   "This function reffers takeAndFetchPicture of SampleCameraActivity.java"
   []
   (let [replyJson (-> (new SimpleRemoteApi) (.actTakePicture))
@@ -93,6 +392,8 @@
         ]
     postImageUrl
     ))
+)
+
 
 #_(
 ;; Usage
