@@ -4,6 +4,7 @@
 ;  (:import com.example.sony.cameraremote.SimpleCameraEventObserver)
 )
 
+;; #TODO: Returned JSON data handling.
 
 ;; Server device.
 (def ^:private SonyDevice (atom nil))
@@ -374,17 +375,21 @@
 
 
 #_(
-;; Usage
+;; #Usage
+
 ;; Namespace setting and load files.
 (ns facet.core)
 (use 'facet.core)
 
-;; Device discovery start.
+;; Start device discovery.
 (init)
 
-;; Update camera information.
-(updateSonyCamInfo)
-
-;; Then, you can access to camera information.
+;; Then, your camera information is updated.
 SonyCamInfo
+
+;; Take a picture.
+(actTakePicture)
+;; Result return like below.
+;; #<JSONObject {"id":1,"result":[["http://10.0.0.1:60152/pict130104_0510450000.JPG?%211234%21http%2dget%3a%2a%3aimage%2fjpeg%3a%2a%21%21%21%21%21"]]}>
+;; You can now grab your photo by accessing to "result" url.
 )
