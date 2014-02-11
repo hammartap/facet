@@ -343,7 +343,7 @@
    
    @return JSON data of response"
   [^String direction ^String movement]
-  )
+  (.actZoom direction movement))
 
 
 (defn getEvent
@@ -369,7 +369,6 @@
 ;; #Usage
 
 ;; Namespace setting and load files.
-(ns facet.core)
 (use 'facet.core)
 
 ;; Start device discovery.
@@ -379,8 +378,8 @@
 SonyCamInfo
 
 ;; Take a picture.
-(actTakePicture)
-;; Result return like below.
-;; #<JSONObject {"id":1,"result":[["http://10.0.0.1:60152/pict130104_0510450000.JPG?%211234%21http%2dget%3a%2a%3aimage%2fjpeg%3a%2a%21%21%21%21%21"]]}>
-;; You can now grab your photo by accessing to "result" URL.
+(takeAndFetchPicture)
+;; This returns URL like below.
+;; "http://10.0.0.1:60152/pict130106_1704390000.JPG?%211234%21http%2dget%3a%2a%3aimage%2fjpeg%3a%2a%21%21%21%21%21"
+;; Now you can grab your photo by accessing the URL.
 )
