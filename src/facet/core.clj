@@ -176,7 +176,7 @@
    @param shootMode shoot mode (ex. \"still\")
    @return JSON data of response"
   [shootMode]
-  )
+  (-> (.setShootMode shootMode)))
 
 
 (defn getAvailableShootMode
@@ -356,7 +356,7 @@
    
    @return JSON data of response"
   [^String direction ^String movement]
-  (.actZoom direction movement))
+  (-> @RemoteApi (.actZoom direction movement)))
 
 
 (defn getEvent
@@ -375,7 +375,7 @@
    @param longPollingFlag true means long polling request.
    @return JSON data of response"
   [longPollingFlag]
-  (.getEvent @RemoteApi longPollingFlag))
+  (-> @RemoteApi (.getEvent longPollingFlag)))
 
 
 #_(
