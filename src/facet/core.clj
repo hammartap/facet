@@ -8,7 +8,7 @@
 
 ;; Server device.
 (def ^:private SonyDevice (atom nil))
-(def RemoteApi (atom nil))
+(def ^:private RemoteApi (atom nil))
 
 
 ;; Contains static information of the camera.
@@ -23,6 +23,13 @@
                   :ip-address      (atom nil)
                   :api-services    (atom nil)
                   })
+
+
+(defn takeAndFetchPicture
+  "This function take a picture, and returns its URL."
+  []
+  (when-not (= @RemoteApi nil)
+    (-> (actTakePicture) (.get "result") (.get 0) (.optString 0))))
 
 
 (defn apiService
@@ -84,7 +91,6 @@
     (if (not (.isSearching ssdp)) (.search ssdp (search-result-handler)))))
 
 
-;;#_(
 ;; #Public functions of SimpleRemoteApi.java
 (defn getAvailableApiList
   "Calls getAvailableApiList API to the target server. Request JSON data is
@@ -268,7 +274,7 @@
   (.stopRecMode @RemoteApi))
 
 
-(defn actTakePicture
+(defn- actTakePicture
   "Calls actTakePicture API to the target server. Request JSON data is such
    like as below.
    
@@ -357,21 +363,6 @@
    @return JSON data of response"
   [longPollingFlag]
   (.getEvent @RemoteApi longPollingFlag))
-
-
-#_(
-;; Let's move this function to Application layer.
-(defn takeAndFetchPicture
-  "This function reffers takeAndFetchPicture of SampleCameraActivity.java"
-  []
-  (let [replyJson (-> (new SimpleRemoteApi) (.actTakePicture))
-        resultObj (-> replyJson (.getJSONArray "result"))
-        iamgeUrlsObj (-> resultObj (.getJSONArray 0))
-        postImageUrl (if (<= 1 (.length imageUrlsObj)) (-> imageUrlsObj (.getString 0)))
-        ]
-    postImageUrl
-    ))
-)
 
 
 #_(
