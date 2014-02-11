@@ -25,14 +25,27 @@
                   })
 
 
+(defn- getResultValue
+  [json]
+  (-> json (.get "result") (.get 0) (.optString 0)))
+
+(defn- getIdValue
+  [json]
+  (-> json (.get "id")))
+
+
 (defn takeAndFetchPicture
-  "This function take a picture, and returns its URL."
+  "This function take a picture, and returns map of its URL and id."
   []
   (when-not (= @RemoteApi nil)
-    (-> (actTakePicture) (.get "result") (.get 0) (.optString 0))))
+    (let [json   (actTakePicture)
+          id     (getIdValue json)
+          result (getResultValue json)]
+      {:id id, :result result}
+      )))
 
 
-(defn apiService
+#_(defn apiService
   "service-name:
      \"camera\""
   [service-name]
