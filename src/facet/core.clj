@@ -34,6 +34,10 @@
   (-> json (.get "id")))
 
 
+;; This is hacky declare to avoid Compiler Exception.
+;; Todo: Manage name-space properly
+(declare actTakePicture)
+
 (defn takeAndFetchPicture
   "This function take a picture, and returns map of its URL and id."
   []
