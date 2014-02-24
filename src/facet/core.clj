@@ -180,7 +180,7 @@
    @param shootMode shoot mode (ex. \"still\")
    @return JSON data of response"
   [shootMode]
-  (-> (.setShootMode shootMode)))
+  (-> @RemoteApi (.setShootMode shootMode)))
 
 
 (defn getAvailableShootMode
