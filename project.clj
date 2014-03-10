@@ -1,4 +1,4 @@
-(defproject facet "0.1.0-SNAPSHOT"
+(defproject facet "0.2.0"
   :description "Sony Remote Camera API Wrapper."
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
