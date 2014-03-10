@@ -1,15 +1,24 @@
 (ns facet.core
   (:import com.example.sony.cameraremote.SimpleRemoteApi)
   (:import com.example.sony.cameraremote.SimpleSsdpClient)
+
+  (:import com.example.sony.cameraremote.utils.SimpleLiveviewSlicer)
+  (:import java.util.concurrent.ArrayBlockingQueue)
+  (:import java.util.concurrent.BlockingQueue)
+
+  (:import javax.imageio.ImageIO)
+  (:import java.io.File)
+  (:import java.io.ByteArrayInputStream)
 ;  (:import com.example.sony.cameraremote.SimpleCameraEventObserver)
 )
 
-;; #TODO: Returned JSON data handling.
+;; ###TODO: Returned JSON data handling.
 
 ;; Server device.
 (def ^:private SonyDevice (atom nil))
 (def ^:private RemoteApi (atom nil))
 
+(def LiveView (atom nil))
 
 ;; Contains static information of the camera.
 (def SonyCamInfo {:name            (atom nil)
@@ -25,15 +34,68 @@
                   })
 
 
+;; ##JSON data handling for takeAndFetchPicture
 (defn- getResultValue
   [json]
-  (-> json (.get "result") (.get 0) (.optString 0)))
+  ;;(-> json (.get "result") (.get 0) (.optString 0))
+  (-> json (.getJSONArray "result") (.get 0) (.getString 0)))
 
 (defn- getIdValue
   [json]
   (-> json (.get "id")))
 
 
+;; ##JSON data handling for startLiveView
+(defn getLiveviewUrl
+  "Returns liveview url string."
+  [json]
+  (-> json (.getJSONArray "result") (.getString 0)))
+
+;; This is hacky declare to avoid Compiler Exception.
+(declare startLiveview)
+(declare stopLiveview)
+
+(defn retrieveLiveView
+  "
+  ;; This function takes an agent which hold image data, and returns a function to stop image-retrieving-thread.
+  (def foo-agent (agent nil))
+  (def foo-stopper (retrieveLiveView foo-agent))
+
+  ;; Save current liveview image like below:
+  (ImageIO/write (ImageIO/read (ByteArrayInputStream. @foo-agent)) \"jpg\" (File. \"foo.jpg\"))
+  ;; Each time, this will save current liveview image.
+  (ImageIO/write (ImageIO/read (ByteArrayInputStream. @foo-agent)) \"jpg\" (File. \"foo.jpg\"))
+  (ImageIO/write (ImageIO/read (ByteArrayInputStream. @foo-agent)) \"jpg\" (File. \"foo.jpg\"))
+
+  ;; At last, stop the image-retrieving-thread.
+  (foo-stopper true)
+  "
+  [imgDataAgent]
+  (let [fetching?   (atom true)
+        replyJson   (startLiveview)
+        liveviewUrl (getLiveviewUrl replyJson)
+        slicer      (new com.example.sony.cameraremote.utils.SimpleLiveviewSlicer)
+        ;; Image retrieving thread.
+        retriever   (Thread. (fn []
+                               (try
+                                 (.open slicer liveviewUrl)
+                                 (if (= slicer nil) nil
+                                     (while @fetching?
+                                       (do 
+                                         (let [payload (.nextPayload slicer)]
+                                           (send-off imgDataAgent (fn [_] (.jpegData payload)))))))
+                                 (catch Exception e nil)
+                                 (finally
+                                   (.close slicer)
+                                   (stopLiveview)))))
+        ]
+    (.start retriever)
+    ;; Return a closure
+    (fn [stop?]
+      (if stop? (reset! fetching? false))
+      fetching?)))
+
+    
 ;; This is hacky declare to avoid Compiler Exception.
 ;; Todo: Manage name-space properly
 (declare actTakePicture)
